@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_loader/core/services/js_bridge.dart';
 
 /// [Widget] displaying the home page consisting of an image the the buttons.
 class HomePage extends StatefulWidget {
@@ -10,6 +11,9 @@ class HomePage extends StatefulWidget {
 
 /// State of a [HomePage].
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _controller = TextEditingController();
+  final JsBridge _jsBridge = JsBridge();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,14 +23,11 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
+            const Expanded(
               child: AspectRatio(
                 aspectRatio: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                child: HtmlElementView(
+                  viewType: 'html_image_element',
                 ),
               ),
             ),
@@ -35,13 +36,14 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _controller,
                     decoration: InputDecoration(hintText: 'Image URL'),
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: null,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                  onPressed: () => _setImageUrl(),
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
                     child: Icon(Icons.arrow_forward),
                   ),
                 ),
@@ -51,10 +53,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Icon(Icons.add),
-      ),
     );
+  }
+
+  void _setImageUrl() {
+    _jsBridge.updateImageUrl(_controller.text);
   }
 }
