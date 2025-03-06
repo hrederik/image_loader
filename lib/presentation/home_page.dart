@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_loader/core/services/js_bridge.dart';
-import 'package:image_loader/presentation/wdigets/offset_popup.dart';
+import 'package:image_loader/presentation/home_page_content.dart';
+import 'package:image_loader/presentation/widgets/offset_popup.dart';
+
 
 /// [Widget] displaying the home page consisting of an image the the buttons.
 class HomePage extends StatefulWidget {
@@ -12,60 +13,38 @@ class HomePage extends StatefulWidget {
 
 /// State of a [HomePage].
 class _HomePageState extends State<HomePage> {
-  final TextEditingController _controller = TextEditingController();
-  final JsBridge _jsBridge = JsBridge();
+  bool _isMenuOpen = false;
+
+  void _toggleMenu() {
+    setState(() {
+      _isMenuOpen = !_isMenuOpen;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: GestureDetector(
-                  onDoubleTap: _onImageDoubleTap,
-                  child: const HtmlElementView(
-                    viewType: 'html_image_element',
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(hintText: 'Image URL'),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _setImageUrl(),
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                    child: Icon(Icons.arrow_forward),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 64),
-          ],
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(),
+          body: const HomePageContent(),
+          floatingActionButton: OffsetPopup(
+            clicked: _toggleMenu,
+            selected: (i) => _toggleMenu(),
+            canceled: _toggleMenu,
+          ),
         ),
-      ),
-      floatingActionButton: const OffsetPopup(),
+        if (_isMenuOpen)
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _toggleMenu,
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.black.withAlpha(150),
+            ),
+          ),
+      ],
     );
-  }
-
-  void _setImageUrl() {
-    _jsBridge.updateImageUrl(_controller.text);
-  }
-
-  void _onImageDoubleTap() {
-    _jsBridge.toggleBrowserFullscreen();
   }
 }
