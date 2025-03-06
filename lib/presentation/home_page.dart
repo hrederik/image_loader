@@ -23,11 +23,14 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Expanded(
+            Expanded(
               child: AspectRatio(
                 aspectRatio: 1,
-                child: HtmlElementView(
-                  viewType: 'html_image_element',
+                child: GestureDetector(
+                  onDoubleTap: _processImageDoubleTap,
+                  child: const HtmlElementView(
+                    viewType: 'html_image_element',
+                  ),
                 ),
               ),
             ),
@@ -37,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(hintText: 'Image URL'),
+                    decoration: const InputDecoration(hintText: 'Image URL'),
                   ),
                 ),
                 ElevatedButton(
@@ -58,5 +61,9 @@ class _HomePageState extends State<HomePage> {
 
   void _setImageUrl() {
     _jsBridge.updateImageUrl(_controller.text);
+  }
+
+  void _processImageDoubleTap() {
+    _jsBridge.toggleBrowserFullscreen();
   }
 }

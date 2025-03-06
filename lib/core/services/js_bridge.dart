@@ -5,4 +5,5 @@ class JsBridge {
   external JsBridge();
 
   external void updateImageUrl(String url);
+  external void toggleBrowserFullscreen();
 }
