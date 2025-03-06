@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_loader/core/services/js_bridge.dart';
+import 'package:image_loader/presentation/wdigets/offset_popup.dart';
 
 /// [Widget] displaying the home page consisting of an image the the buttons.
 class HomePage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
               child: AspectRatio(
                 aspectRatio: 1,
                 child: GestureDetector(
-                  onDoubleTap: _processImageDoubleTap,
+                  onDoubleTap: _onImageDoubleTap,
                   child: const HtmlElementView(
                     viewType: 'html_image_element',
                   ),
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButton: const OffsetPopup(),
     );
   }
 
@@ -63,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     _jsBridge.updateImageUrl(_controller.text);
   }
 
-  void _processImageDoubleTap() {
+  void _onImageDoubleTap() {
     _jsBridge.toggleBrowserFullscreen();
   }
 }
