@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import '../core/services/js_bridge.dart';
 
 class HomePageContent extends StatefulWidget {
-  const HomePageContent({super.key});
+  const HomePageContent({
+    super.key,
+    required JsBridge jsBridge,
+  }) : _jsBridge = jsBridge;
+
+  final JsBridge _jsBridge;
 
   @override
   State<HomePageContent> createState() => _HomePageContentState();
@@ -11,7 +16,6 @@ class HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<HomePageContent> {
   final TextEditingController _controller = TextEditingController();
-  final JsBridge _jsBridge = JsBridge();
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +36,25 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(hintText: 'Image URL'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 55),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(hintText: 'Image URL'),
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () => _setImageUrl(),
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                  child: Icon(Icons.arrow_forward),
+                ElevatedButton(
+                  onPressed: () => _setImageUrl(),
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                    child: Icon(Icons.arrow_forward),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 64),
         ],
@@ -56,10 +63,10 @@ class _HomePageContentState extends State<HomePageContent> {
   }
 
   void _setImageUrl() {
-    _jsBridge.updateImageUrl(_controller.text);
+    widget._jsBridge.updateImageUrl(_controller.text);
   }
 
   void _onImageDoubleTap() {
-    _jsBridge.toggleBrowserFullscreen();
+    widget._jsBridge.toggleBrowserFullscreen();
   }
 }
