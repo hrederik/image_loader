@@ -8,21 +8,51 @@ class JsBridge {
   }
 
   toggleBrowserFullscreen() {
-    if (!document.fullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.msFullscreenElement) {
-      const element = document.documentElement;
-      if (element.requestFullscreen) element.requestFullscreen();
-      else if (element.mozRequestFullScreen) element.mozRequestFullScreen();
-      else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
-      else if (element.msRequestFullscreen) element.msRequestFullscreen();
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      else if (document.msExitFullscreen) document.msExitFullscreen();
-    }
+    const isFullscreen = !!(
+        document.fullscreenElement ||
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement
+      );
+
+      if (!isFullscreen) {
+        this.enableFullscreen();
+      } else {
+        this.disableFullscreen();
+      }
+  }
+
+  enableFullscreen() {
+    const element = document.documentElement;
+    const fullscreenMethods = [
+      'requestFullscreen',
+      'mozRequestFullScreen',
+      'webkitRequestFullscreen',
+      'msRequestFullscreen'
+    ];
+
+    fullscreenMethods.forEach(method => {
+      if (element[method]) {
+        element[method]();
+        return;
+      }
+    });
+  }
+
+  disableFullscreen() {
+    const exitMethods = [
+      'exitFullscreen',
+      'mozCancelFullScreen',
+      'webkitExitFullscreen',
+      'msExitFullscreen'
+    ];
+
+    exitMethods.forEach(method => {
+      if (document[method]) {
+        document[method]();
+        return;
+      }
+    });
   }
 }
 
