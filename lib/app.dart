@@ -8,6 +8,6 @@ class ImageLoaderApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Demo', home: const HomePage());
+    return const MaterialApp(title: 'Flutter Demo', home: HomePage());
   }
 }
