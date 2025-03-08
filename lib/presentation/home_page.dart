@@ -3,7 +3,7 @@ import 'package:image_loader/core/services/js_bridge.dart';
 import 'package:image_loader/presentation/home_page_content.dart';
 import 'package:image_loader/presentation/widgets/offset_popup.dart';
 
-/// [Widget] displaying the home page consisting of an image the the buttons.
+/// [Widget] displaying the home page consisting of an image and buttons.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         Scaffold(
           appBar: AppBar(),
-          body: HomePageContent(jsBridge: _jsBridge,),
+          body: HomePageContent(jsBridge: _jsBridge),
           floatingActionButton: OffsetPopup(
             clicked: _enableBackground,
             selected: _onOptionSelected,
@@ -43,9 +43,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Handles the selection of an option from the popup menu.
+  ///
+  /// [index] is the index of the selected option.
   void _onOptionSelected(int index) {
     _disableBackground();
-
     if (index == 0) {
       _jsBridge.enableFullscreen();
       return;
@@ -57,12 +59,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  /// Enables the background overlay.
   void _enableBackground() {
     setState(() {
       _isBackgroundActive = true;
     });
   }
 
+  /// Disables the background overlay.
   void _disableBackground() {
     setState(() {
       _isBackgroundActive = false;
