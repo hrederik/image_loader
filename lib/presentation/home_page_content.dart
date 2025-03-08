@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../core/services/js_bridge.dart';
 
+/// [Widget] that provides the content of the Home page,
+/// consisting of an image display and a URL input field.
 class HomePageContent extends StatefulWidget {
+  /// Creates a [HomePageContent].
   const HomePageContent({
     super.key,
     required JsBridge jsBridge,
@@ -14,6 +17,7 @@ class HomePageContent extends StatefulWidget {
   State<HomePageContent> createState() => _HomePageContentState();
 }
 
+/// State of the [HomePageContent] widget.
 class _HomePageContentState extends State<HomePageContent> {
   final TextEditingController _controller = TextEditingController();
 
@@ -62,10 +66,12 @@ class _HomePageContentState extends State<HomePageContent> {
     );
   }
 
+  /// Sets the image URL using the text entered in the text field.
   void _setImageUrl() {
     widget._jsBridge.updateImageUrl(_controller.text);
   }
 
+  /// Toggles the browser to fullscreen mode when the image is double-tapped.
   void _onImageDoubleTap() {
     widget._jsBridge.toggleBrowserFullscreen();
   }
